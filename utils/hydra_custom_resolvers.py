@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 from omegaconf import OmegaConf
 import math
 from functools import reduce
@@ -21,7 +28,6 @@ def multiply_args(*args):
 
 def multiply_args_int(*args):
     return int(reduce(operator.mul, (float(x) for x in args), 1))
-#     return int(math.prod(float(x) for x in args))
 
 def concat_str_args(*str_list):
     if isinstance(str_list, tuple): # handling some special cases

@@ -1,10 +1,16 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 from typing import List, Optional
 import wandb
 import hydra
 import os
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning import Callback, LightningDataModule, LightningModule, Trainer, seed_everything
-# from pytorch_lightning.loggers import LightningLoggerBase
 
 import utils.general as utils
 
@@ -48,14 +54,6 @@ def train(config: DictConfig) -> Optional[float]:
                 log.info(f"Instantiating logger <{lg_conf._target_}>")
                 logger.append(hydra.utils.instantiate(lg_conf))
 
-#     wandb.watch(
-#         model,
-#         criterion=None,
-#         log="gradients",
-#         log_freq=1000,
-#         idx=None,
-#         log_graph=(False),
-#     )
 
         
     # Init lightning trainer
@@ -82,8 +80,6 @@ def train(config: DictConfig) -> Optional[float]:
         with open(config.ckpt_path, "rb") as f:
             ckpt = torch.load(f)
             ckpt["optimizer_states"] = []
-#             for key in ckpt["optimizer_states"][0].keys():
-#                 ckpt["optimizer_states"][0][key] = []
             ckpt["lr_schedulers"] = []
         with open(config.ckpt_path, "wb") as f:
             torch.save(ckpt, f)

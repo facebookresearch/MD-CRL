@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 scheduler:
     _target_: transformers.get_cosine_with_hard_restarts_schedule_with_warmup
     num_warmup_steps: 1000 # 3000

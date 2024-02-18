@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: models.autoencoder_pl.AutoencoderPL.load_from_checkpoint
 
 defaults:
@@ -7,11 +14,7 @@ defaults:
   - additional_logger: null # reconstruction_logger
 
 
-# important note: if you pass a full PL checkpoint it will have all the modules like callbacks, hyperparameters, optimizers, etc., i.e., the state of training.
-# hence you should be careful that the model loading the ckpt is consistent with what is being passed. on the other hand you can just save the state dict
-# and pass that as the ckpt and override the parameters of the model you're loading the ckpt for as you want.
 
 
-# hparams_file: ${work_dir}/configs/model/overrides.yaml
 num_channels: ${model.autoencoder.num_channels}
 logging_name: eval_from_ckpt_${run_name_ckpt:${model.checkpoint_path}}

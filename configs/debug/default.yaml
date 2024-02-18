@@ -1,6 +1,4 @@
-# @package _global_
 
-# default debugging setup which runs for 100 steps – a starting point for the other configs
 
 defaults:
   - override /hydra: debug
@@ -20,10 +18,7 @@ datamodule:
   num_workers: 0 # debuggers don't like multiprocessing
   pin_memory: False # disable gpu memory pin
 
-# sets level of all command line loggers to 'DEBUG'
-# https://hydra.cc/docs/tutorials/basic/running_your_app/logging/
 hydra:
   verbose: True
 
-# config is already printed by hydra when `hydra/verbose: True`
 print_config: False

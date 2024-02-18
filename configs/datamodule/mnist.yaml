@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: datamodule.base_datamodule.BaseDataModule
 
 defaults:
@@ -18,13 +25,11 @@ seed: ${seed}
 transform:
     augs: [] # choices=["shift", "hflip", "vflip", "scale", "rotate"]
 
-# Concerning the data_loaders
 batch_size: 256
 num_workers: 6
 shuffle: False
 drop_last: False
 
-# Samples
 num_samples:
     train: 0.8
     valid: 0.2

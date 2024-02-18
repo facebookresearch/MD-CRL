@@ -1,7 +1,4 @@
-# @package _global_
 
-# runs 2 epochs of training, validation
-# each with a limited number of `num_batches` batches
 
 defaults:
   - default_run.yaml

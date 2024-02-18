@@ -1,8 +1,4 @@
-# @package _global_
 
-# runs `num_steps` of training with `num_validation_runs` validation cycles
-# runs testing
-# the train, validation, test are all limited to (the first) `num_batches` batches (in each dataloader)
 
 defaults:
   - default_run

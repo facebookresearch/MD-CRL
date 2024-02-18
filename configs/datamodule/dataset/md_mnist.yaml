@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 dataset_target: datamodule.md_mnist_dataset.MNISTMultiDomainDataset
 
 dataset_name: multi_domain_mnist_${datamodule.dataset.num_domains}
@@ -10,16 +17,10 @@ correlated_z: False
 corr_prob: 0.8
 dynamic_corr_prob: 0.9
 
-# manual strategy
 domain_color_list: [[0,1], [2,3]]
 domain_color_probs: [[0.5, 0.5], [0.5, 0.5]]
 
-# auto strategy
 
-# num_samples:
-#   train: 60000
-#   valid: 12000
-#   test: 10000
 
 dataset_parameters:
   train:

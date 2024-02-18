@@ -1,6 +1,4 @@
-# @package _global_
 
-# specify here default training configuration
 defaults:
   - _self_
   - trainer: default.yaml
@@ -25,29 +23,18 @@ defaults:
 
 
 
-# set to True to run model evaluation (for cleaner logs, running evaluation using the evaluation script is preferred)
 test: False
 
-# path to original working directory
 work_dir: ${hydra:runtime.cwd}
-# Verbose explanation: hydra hijacks the working directory by changing it to the current log directory,
-# so it's useful to have this path as a special variable
-# learn more here: https://hydra.cc/docs/next/tutorials/basic/running_your_app/working_directory
 
-# resuming from a checkpoint. This argument should be passed to trainer.fit(), not to trainer's __init__. Either set it to null to start from scratch or populate it with a valid ckpt_path to resume training
-# note that the ckpt passed here (and not specified in model_name.ckpt) will contain the full training state,
-# i.e. callbacks, optimizer states, schedulers, etc. (of course along with the state dict). For passing 
-# state dict only, use the respective ckpt config of each model and set this argument to null.
 ckpt_path: ???
 
 run_path: null
 
 run_name: ${model.logging_name} # Will be used for logging
 
-# pretty print config at the start of the run using Rich library
 print_config: True
 
-# disable python warnings if they annoy you
 ignore_warnings: True
 
 seed: 1234

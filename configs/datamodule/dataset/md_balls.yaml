@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 dataset_target: datamodule.md_balls_dataset.MDBalls
 properties_list: ["x","y"] # can be any subset of ["x","y","c","s","l","p"]
 same_color: False # note that if "c"  is not in the list of properties, this field overrides the colours

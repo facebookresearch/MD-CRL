@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 import numpy as np
 import torch
 from torch import nn
@@ -12,15 +19,8 @@ def set_seed(args):
         torch.cuda.manual_seed_all(args.seed)
 
 
-#     random.seed(SEED)
-#     np.random.seed(SEED)
-#     torch.manual_seed(SEED)
-#     torch.cuda.manual_seed(SEED)
-# Shouldn't we use this last one?
-#     torch.backends.cudnn.deterministic = True
 
 
-# Don't worry about randomization and seed here. It's taken care of by set_seed above, and pl seed_everything
 def init_weights(model):
     for name, param in model.named_parameters():
         nn.init.uniform_(param.data, -0.08, 0.08)
@@ -207,50 +207,17 @@ def penalty_domain_classification(z, domains, num_domains, z_dim_invariant, *arg
     # return torch.tensor(-domain_classification_loss, device=z.device).unsqueeze(0), 0.
 
 
-# def compute_rbf_kernel(x, y, sigma=1.0):
-#     """
-#     Compute the Gaussian (RBF) kernel matrix between two sets of samples x and y.
 
-#     Args:
-#         x (Tensor): A tensor of shape (n_samples_x, n_features).
-#         y (Tensor): A tensor of shape (n_samples_y, n_features).
-#         sigma (float): The bandwidth of the RBF kernel.
 
-#     Returns:
-#         Tensor: The RBF kernel matrix of shape (n_samples_x, n_samples_y).
-#     """
 
-#     # Compute squared Euclidean distances between samples
-#     xx = torch.sum(x * x, dim=1).view(-1, 1)
-#     yy = torch.sum(y * y, dim=1).view(1, -1)
-#     xy = torch.matmul(x, y.t())
 
-#     distances = xx - 2 * xy + yy
 
-#     # Compute RBF kernel matrix
-#     kernel_matrix = torch.exp(-distances / (2 * sigma**2))
 
-#     return kernel_matrix
 
-# def mmd_loss(x, y, sigma=1.0):
-#     """
-#     Compute the Maximum Mean Discrepancy (MMD) between two sets of samples x and y.
 
-#     Args:
-#         x (Tensor): A tensor of shape (n_samples_x, n_features).
-#         y (Tensor): A tensor of shape (n_samples_y, n_features).
-#         sigma (float): The bandwidth of the RBF kernel.
 
-#     Returns:
-#         Tensor: The MMD loss.
-#     """
-#     kernel_xx = compute_rbf_kernel(x, x, sigma)
-#     kernel_yy = compute_rbf_kernel(y, y, sigma)
-#     kernel_xy = compute_rbf_kernel(x, y, sigma)
 
-#     mmd = torch.mean(kernel_xx) - 2 * torch.mean(kernel_xy) + torch.mean(kernel_yy)
 
-#     return mmd
 
 def mmd_loss(MMD, z, domains, num_domains, z_dim_invariant, *args):
     # compute the MMD loss between the invariant dimensions of z

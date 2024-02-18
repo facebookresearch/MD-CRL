@@ -1,4 +1,3 @@
-# https://wandb.ai
 
 wandb:
   _target_: pytorch_lightning.loggers.wandb.WandbLogger

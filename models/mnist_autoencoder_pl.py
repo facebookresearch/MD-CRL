@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 import torch
 from torch.nn import functional as F
 from .base_pl import BasePl
@@ -180,7 +187,6 @@ class AutoencoderPL(BasePl):
 import torch.nn as nn
 import torchvision.models as models
 
-# Autoencoder with ResNet18 Encoder
 class ResNet18Autoencoder(nn.Module):
     def __init__(self, **kwargs):
         super(ResNet18Autoencoder, self).__init__()

@@ -1,7 +1,4 @@
-# @package _global_
 
-# runs `num_steps` of training with `num_validation_runs` validation cycles
-# uses the same (first) `num_batches` batches of the training dataloader for both training and validation
 
 defaults:
   - default.yaml

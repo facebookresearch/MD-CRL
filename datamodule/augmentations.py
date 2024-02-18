@@ -1,15 +1,4 @@
-# import torch.utils.data
-# import torch
-# import math
-# import os
-# import numpy as np
-# import h5py
-# from typing import Callable, Optional, Sequence
-# from PIL import Image
-# import torchvision.transforms.functional as TF
-# from torchvision import transforms
 
-# OWN_PATH = os.path.split(os.path.abspath(__file__))[0]
 
 
 PIL_to_th = lambda x: x  # transforms.PILToTensor()
@@ -141,7 +130,6 @@ def scale(im, order: int = 3):
         )
 
 
-# augmentations = [random_rotate, hflip, vflip, shift]  # , scale]
 ALL_AUGMENTATIONS = {
     "shift": shift,
     "hflip": hflip,

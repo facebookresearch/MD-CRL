@@ -1,25 +1,23 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: pytorch_lightning.Trainer
 
-# set `1` to train on GPU, `0` to train on CPU only
-# gpus: 1 # int # It should be set to 1 so that the gpu will be used.
-#                   Currently the list of all available gpus is being passed to the trainer.
 
 accelerator: cpu
 devices: "auto"
-# max_epochs: *n_e # Stop training once this number of epochs is reached.
 min_epochs: 200 # Force training for at least these many epochs.
 max_epochs: 1000 # 1_000_000
-# max_steps: 200000
-# max_steps: 50000 # Disable it and use early stopping
 
 val_check_interval: 1.0 # if 1.0, only check validation set once per training epoch, 0.25, 4 times, 1000, every 1000 batches.
 
 enable_model_summary: null
-# progress_bar_refresh_rate: 5 # deprecated in v 1.5
-# resume_from_checkpoint: null # deprecated in v 1.5
 
 gradient_clip_val: 0.1
-# gradient_clip_algorithm: "norm"
 
     
 log_every_n_steps: 5 # How often to log within steps.

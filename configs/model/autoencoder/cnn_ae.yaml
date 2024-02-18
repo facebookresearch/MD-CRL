@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: models.modules.cnn_ae.CNNAE
 
 latent_dim: ${model.z_dim}
@@ -67,63 +74,7 @@ encoder_cnn:
       _target_: torch.nn.ReLU
 
       
-# decoder_cnn:
-#   _target_: models.modules.cnn_ae.Decoder
-#   latent_dim: ${model.autoencoder.latent_dim}
-#   width: ${model.autoencoder.width}
-#   height: ${model.autoencoder.height}
-#   num_channels: ${model.autoencoder.num_channels}
 
-#   decoder_layers:
-#     Deconv1:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: ${model.autoencoder.latent_dim}
-#       out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv3.out_channels}
-#       kernel_size: 5
-#       stride: 1
-#       padding: 1
-#       # 32x1x1 --> 32x3x3
-#     BN1:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv1.out_channels}
-#     ReLU1:
-#       _target_: torch.nn.ReLU
-#     Deconv2:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv1.out_channels}
-#       out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv2.out_channels}
-#       kernel_size: 7 # checkerboard artifact
-#       stride: 1
-#       padding: 1
-#       # 32x3x3 --> 16x7x7
-#     BN2:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv2.out_channels}
-#     ReLU2:
-#       _target_: torch.nn.ReLU
-#     Deconv3:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv2.out_channels}
-#       out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv1.out_channels}
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 16x7x7 --> 8x14x14
-#     BN3:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv3.out_channels}
-#     ReLU3:
-#       _target_: torch.nn.ReLU
-#     Deconv4:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Deconv3.out_channels}
-#       out_channels: ${model.autoencoder.num_channels}
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 8x14x14 --> 3x28x28
-#     ReLU4:
-#       _target_: torch.nn.ReLU
 decoder_cnn:
   _target_: models.modules.cnn_ae.Decoder
   latent_dim: ${model.autoencoder.latent_dim}

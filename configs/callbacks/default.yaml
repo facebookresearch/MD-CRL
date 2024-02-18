@@ -1,4 +1,3 @@
-# specify here default for callbacks
 defaults:
   - visualization_callback: default.yaml
   - _self_
@@ -16,7 +15,6 @@ model_checkpoint:
   filename: "${model.logging_name}-{epoch:02d}-{${callbacks.model_checkpoint.monitor}:.2f}" 
   save_on_train_epoch_end: False
   auto_insert_metric_name: True
-#   every_n_epochs: 1
   every_n_train_steps: 20
 
 learning_rate_monitor:

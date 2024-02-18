@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 import torch
 from torchvision import transforms
 
@@ -55,10 +62,3 @@ class TensorClip(object):
         return self.__class__.__name__ + '()'
     
     
-# ALL_TRANSFORMATIONS = {
-#     "standard": Standardize(),
-#     "reverse": Reverse(),
-#     "tensor": transforms.ToTensor(),
-#     "normalize": transforms.Normalize(),
-#     "clip": TensorClip(),
-# }

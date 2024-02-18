@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: datamodule.xz_datamodule.XZDataModule
   
 dataset_name: xz
@@ -8,7 +15,6 @@ data_dir: ${run_path}
 
 seed: ${seed}
 
-# Concerning the data_loaders
 batch_size: 1024
 num_workers: 6
 shuffle: False

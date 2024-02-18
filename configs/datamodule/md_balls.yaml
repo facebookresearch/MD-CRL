@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: datamodule.base_datamodule.BaseDataModule
 
 defaults:
@@ -6,14 +13,9 @@ defaults:
 dataset_name: md_balls_${datamodule.dataset.n_balls}
 datamodule_name: md_balls
 
-# save_dataset: False
-# load_dataset: True
 save_dataset: False
 load_dataset: True
 data_dir: ${work_dir}
-# data_dir: "/home/mila/s/sayed.mansouri-tehrani/scratch/md_balls/n_iv_${datamodule.dataset.n_balls_invariant}_n_sp_${datamodule.dataset.n_balls_spurious}/"
-# data_dir_narval: "/home/aminm/scratch/md_balls/n_iv_${datamodule.dataset.n_balls_invariant}_n_sp_${datamodule.dataset.n_balls_spurious}/"
-# data_dir_narval: "/home/aminm/scratch/md_balls/${datamodule.dataset.n_balls}/"
 
 
 
@@ -23,20 +25,17 @@ transform:
     augs: [] # choices=["shift", "hflip", "vflip", "scale", "rotate"]
 
 
-# Concerning the data_loaders
 batch_size: 256
 num_workers: 6
 shuffle: False
 drop_last: False
 
-# Samples
 num_samples:
     train: 60000
     valid: 10000
     test: 1000
 
 
-# color selection of the balls
 color_selection: cyclic_fixed # options: cyclic_fixed, same, random
 
       
@@ -47,8 +46,4 @@ transforms:
       _target_: datamodule.transformations.Standardize
     t3:
       _target_: datamodule.transformations.TensorClip
-#     t4:
-#       _target_: torchvision.transforms.Normalize
-#       mean: [0.98, 0.98, 0.98]
-#       std: [0.09, 0.09, 0.09]
 

@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: models.modules.cnn_ae_res.CNNAERes
 
 latent_dim: ${model.z_dim}
@@ -112,135 +119,7 @@ decoder_cnn:
     ReLU4:
       _target_: torch.nn.ReLU
 
-# encoder_cnn:
-#   _target_: models.modules.cnn_ae.Encoder
-#   latent_dim: ${model.autoencoder.latent_dim}
-#   width: ${model.autoencoder.width}
-#   height: ${model.autoencoder.height}
 
-#   encoder_layers:
-#     Conv1:
-#       _target_: torch.nn.Conv2d
-#       in_channels: ${model.autoencoder.num_channels}
-#       out_channels: 4
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 4x14x14
-#     ReLU1:
-#       _target_: torch.nn.ReLU
-#     Conv2:
-#       _target_: torch.nn.Conv2d
-#       in_channels: 4
-#       out_channels: 8
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 8x7x7
-#     ReLU2:
-#       _target_: torch.nn.ReLU
-#     Conv3:
-#       _target_: torch.nn.Conv2d
-#       in_channels: 8
-#       out_channels: 16
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 16x3x3
-#     ReLU3:
-#       _target_: torch.nn.ReLU
-#     Conv4:
-#       _target_: torch.nn.Conv2d
-#       in_channels: 16
-#       out_channels: ${model.autoencoder.latent_dim}
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # z_dimx1x1
-#     ReLU4:
-#       _target_: torch.nn.ReLU
 
       
-# decoder_cnn:
-#   _target_: models.modules.cnn_ae.Decoder
-#   latent_dim: ${model.autoencoder.latent_dim}
-#   width: ${model.autoencoder.width}
-#   height: ${model.autoencoder.height}
-#   num_channels: ${model.autoencoder.num_channels}
 
-#   decoder_layers:
-#     Deconv1:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: ${model.autoencoder.latent_dim}
-#       out_channels: 32
-#       kernel_size: 5
-#       stride: 1
-#       padding: 1
-#       # 32x1x1 --> 32x2x2
-#     BN1:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: 32
-#     ReLU1:
-#       _target_: torch.nn.ReLU
-#     Deconv2:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: 32
-#       out_channels: 16
-#       kernel_size: 5
-#       stride: 2
-#       padding: 1
-#       # 32x2x2 --> 16x2x2
-#     BN2:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: 16
-#     ReLU2:
-#       _target_: torch.nn.ReLU
-#     Deconv3:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: 16
-#       out_channels: 8
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 16x2x2 --> 8x4x4
-#     BN3:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: 8
-#     ReLU3:
-#       _target_: torch.nn.ReLU
-#     Deconv4:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: 8
-#       out_channels: 4
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 8x4x4 --> 4x8x8
-#     BN4: 
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: 4
-#     ReLU4:
-#       _target_: torch.nn.ReLU
-#     Deconv5:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: 4
-#       out_channels: 4
-#       kernel_size: 2
-#       stride: 2
-#       padding: 1
-#       # 4x8x8 --> 4x14x14
-#     BN5:
-#       _target_: torch.nn.BatchNorm2d
-#       num_features: 4
-#     ReLU5:
-#       _target_: torch.nn.ReLU
-#     Deconv6:
-#       _target_: torch.nn.ConvTranspose2d
-#       in_channels: 4
-#       out_channels: ${model.autoencoder.num_channels}
-#       kernel_size: 4
-#       stride: 2
-#       padding: 1
-#       # 4x14x14 --> 3x28x28
-#     ReLU6:
-#       _target_: torch.nn.ReLU

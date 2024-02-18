@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _target_: models.beta_vae_pl.BetaVAEPL
 
 defaults:
@@ -14,11 +21,7 @@ z_dim_invariant_data: ${mult_int:${datamodule.dataset.z_dim},0.5}
 beta: 1.0
 r2_fit_intercept: True
 
-# full ckpt containing state_dict, callbacks, optimizer, hyperparameters, etc.
 pl_model_ckpt_path: null
-# set this to null to train from scratch.  NOTE: This path (.pt) only contains the 
-# state_dict (to be flexible), if the full ckpt is required (not flexible w/ 
-# different # of slots, then load .ckpt file)
 autoencoder_ckpt_path: ${retrieve_encoder_state_dict:${model.pl_model_ckpt_path}}
 autoencoder_freeze: False
 

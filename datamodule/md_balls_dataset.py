@@ -1,3 +1,10 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 from .abstract_md_balls_dataset import BallsDataset, circle
 import torch
 import os
@@ -17,7 +24,6 @@ if "SDL_VIDEODRIVER" not in os.environ:
     os.environ["SDL_VIDEODRIVER"] = "dummy"
     os.environ["SDL_AUDIODRIVER"] = "dsp"
 
-# HSV colours
 COLOURS_ = [
     [0.0, 0.5, 1.0], # red
     # [0.85, 0.6, 0.6],
