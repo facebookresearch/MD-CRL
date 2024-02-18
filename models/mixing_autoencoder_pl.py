@@ -11,7 +11,6 @@ import hydra
 from omegaconf import OmegaConf
 import os
 import wandb
-from utils.disentanglement_utils import linear_disentanglement, permutation_disentanglement
 import utils.general as utils
 log = utils.get_logger(__name__)
 
