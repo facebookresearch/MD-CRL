@@ -78,6 +78,6 @@ torchmetrics==1.1.2
 torchvision==0.15.2
 tqdm==4.66.1
 triton==2.0.0
-urllib3==2.0.4
+urllib3==2.0.7
 wandb==0.15.10
 yarl==1.9.2
