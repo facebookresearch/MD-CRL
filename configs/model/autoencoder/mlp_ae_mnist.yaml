@@ -1,0 +1,71 @@
+_target_: models.modules.mlp_ae.FCAE
+
+activation: torch.nn.ReLU # torch.nn.ReLU, torch.nn.LeakyReLU, torch.nn.Sigmoid, torch.nn.Tanh
+latent_dim: ${model.z_dim}
+width: 256
+
+encoder:
+  _target_: models.modules.mlp_ae.Encoder
+
+  encoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${mult_int:28,28,3}
+      out_features: ${model.autoencoder.width}
+      bias: True
+    BN1:
+      _target_: torch.nn.BatchNorm1d
+      num_features: ${model.autoencoder.width}
+    ReLU1:
+      _target_: ${model.autoencoder.activation}
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.width}
+      out_features: ${model.autoencoder.width}
+      bias: True
+    BN2:
+      _target_: torch.nn.BatchNorm1d
+      num_features: ${model.autoencoder.width}
+    ReLU2:
+      _target_: ${model.autoencoder.activation}
+    Linear3:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.width}
+      out_features: ${model.autoencoder.latent_dim}
+      bias: True
+    BN3:
+      _target_: torch.nn.BatchNorm1d
+      num_features: ${model.autoencoder.latent_dim}
+    ReLU3:
+      _target_: ${model.autoencoder.activation}
+
+    
+decoder:
+  _target_: models.modules.mlp_ae.Decoder
+
+  decoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: ${model.autoencoder.width}
+      bias: True
+    BN1:
+      _target_: torch.nn.BatchNorm1d
+      num_features: ${model.autoencoder.width}
+    ReLU1:
+      _target_: ${model.autoencoder.activation}
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.width}
+      out_features: ${model.autoencoder.width}
+      bias: True
+    BN2:
+      _target_: torch.nn.BatchNorm1d
+      num_features: ${model.autoencoder.width}
+    ReLU2:
+      _target_: ${model.autoencoder.activation}
+    Linear3:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.width}
+      out_features: ${mult_int:28,28,3}
+      bias: True

@@ -1,0 +1,21 @@
+# https://wandb.ai
+
+wandb:
+  _target_: pytorch_lightning.loggers.wandb.WandbLogger
+  project: "Multi-Domain Causal Representation Learning" # The name of the project where you're sending the new run. Default: Uncategorized runs
+  name: ${run_name} # A short display name for this run, which is how you'll identify this run in the UI. Default: Randomly generated two word name
+  save_dir: "."
+  offline: False # set True to store all logs only locally
+  id: null # A unique ID for this run, used for resuming! See guide for resuming runs...
+  # entity: ""  # set to name of your wandb team or just remove it
+  log_model: False
+  #prefix: ""
+  job_type: "train" # Specify the type of run, which is useful when you're grouping runs together into larger experiments using group
+  group: "" # better to use `group` and `tags` via command line, for instance when using `multirun` to group or tag a number of similar experiments.
+  tags: []
+  notes:
+  
+  
+logging_params:
+    save_dir: "logs/"   
+    name: ${model.logging_name}

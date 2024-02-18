@@ -1,0 +1,130 @@
+dataset_target: datamodule.mixing_dataset.SyntheticMixingDataset
+
+# dataset_name: synthetic_mixing_lin_${datamodule.dataset.linear}_nd${datamodule.dataset.num_domains}_z${datamodule.dataset.z_dim}_p${datamodule.dataset.polynomial_degree}
+dataset_name: synthetic_mixing
+generation_strategy: "auto" # "auto", "manual"
+num_domains: 4
+domain_lengths: [0.25, 0.25, 0.25, 0.25] # [0.5, 0.5]
+invariant_dist_params: [0,1] # [1, 2], [0,1]
+
+# manual strategy
+# domain_dist_ranges: [[1,2], [2,3], [-1,1], [-3,-2]] # [[1,2], [2,3]] # [[0,1], [1,4], [-5,-2], [-2,0]] # [[1,2], [2,3], [-1,1], [-3,-2]] # [[1,2], [2,3]]
+
+# auto strategy
+domain_dist_ranges: [-5.,5.]
+# domain_dist_ranges_pos: [1.,5.]
+# domain_dist_ranges_neg: [-5.,0.]
+
+z_dim: 4
+z_dim_invariant: ${floor_div:${datamodule.dataset.z_dim}, 2} # 2
+x_dim: ${mult_int:${datamodule.dataset.z_dim}, 2} # 8
+
+# mixing_parameters:
+linear: True
+non_linearity: "polynomial" # "mlp", "polynomial"
+polynomial_degree: 2
+correlated_z: False
+corr_prob: 0.5
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.train}
+      num_domains: ${datamodule.dataset.num_domains}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      domain_dist_ranges: ${datamodule.dataset.domain_dist_ranges}
+      # domain_dist_ranges_pos: ${datamodule.dataset.domain_dist_ranges_pos}
+      # domain_dist_ranges_neg: ${datamodule.dataset.domain_dist_ranges_neg}
+      invariant_dist_params: ${datamodule.dataset.invariant_dist_params}
+      linear: ${datamodule.dataset.linear}
+      non_linearity: ${datamodule.dataset.non_linearity}
+      polynomial_degree: ${datamodule.dataset.polynomial_degree}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      z_dim: ${datamodule.dataset.z_dim}
+      z_dim_invariant: ${datamodule.dataset.z_dim_invariant}
+      x_dim: ${datamodule.dataset.x_dim}
+      mixing_architecture: ${datamodule.dataset.mixing_architecture}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "valid"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.valid}
+      num_domains: ${datamodule.dataset.num_domains}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      domain_dist_ranges: ${datamodule.dataset.domain_dist_ranges}
+      # domain_dist_ranges_pos: ${datamodule.dataset.domain_dist_ranges_pos}
+      # domain_dist_ranges_neg: ${datamodule.dataset.domain_dist_ranges_neg}
+      invariant_dist_params: ${datamodule.dataset.invariant_dist_params}
+      linear: ${datamodule.dataset.linear}
+      non_linearity: ${datamodule.dataset.non_linearity}
+      polynomial_degree: ${datamodule.dataset.polynomial_degree}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      z_dim: ${datamodule.dataset.z_dim}
+      z_dim_invariant: ${datamodule.dataset.z_dim_invariant}
+      x_dim: ${datamodule.dataset.x_dim}
+      mixing_architecture: ${datamodule.dataset.mixing_architecture}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.test}
+      num_domains: ${datamodule.dataset.num_domains}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      domain_dist_ranges: ${datamodule.dataset.domain_dist_ranges}
+      # domain_dist_ranges_pos: ${datamodule.dataset.domain_dist_ranges_pos}
+      # domain_dist_ranges_neg: ${datamodule.dataset.domain_dist_ranges_neg}
+      invariant_dist_params: ${datamodule.dataset.invariant_dist_params}
+      linear: ${datamodule.dataset.linear}
+      non_linearity: ${datamodule.dataset.non_linearity}
+      polynomial_degree: ${datamodule.dataset.polynomial_degree}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      z_dim: ${datamodule.dataset.z_dim}
+      z_dim_invariant: ${datamodule.dataset.z_dim_invariant}
+      x_dim: ${datamodule.dataset.x_dim}
+      mixing_architecture: ${datamodule.dataset.mixing_architecture}
+      
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+
+# mixing architecture if the mixing is not linear
+activation: torch.nn.ReLU # torch.nn.ReLU, torch.nn.LeakyReLU, torch.nn.Sigmoid, torch.nn.Tanh
+mixing_architecture:
+  Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${datamodule.dataset.z_dim}
+      out_features: ${mult_int:${datamodule.dataset.z_dim},2}
+      bias: True
+  ReLU1:
+    _target_: ${datamodule.dataset.activation} # torch.nn.Tanh
+  Linear2:
+    _target_: torch.nn.Linear
+    in_features: ${mult_int:${datamodule.dataset.z_dim},2}
+    out_features: ${datamodule.dataset.x_dim}
+    bias: True
+

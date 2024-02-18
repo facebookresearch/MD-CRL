@@ -1,0 +1,6 @@
+_target_: slot_based_disentanglement.loggers.ReconstructionLogger
+
+logging_interval: 400 # Every 100 optimization steps
+samples_per_train_interval: 5 # Log 5 train samples
+
+samples_per_val_interval: 7 # Log 10 validation samples

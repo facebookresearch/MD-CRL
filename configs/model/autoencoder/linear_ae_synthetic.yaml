@@ -1,0 +1,21 @@
+_target_: models.modules.mlp_ae.FCAE
+
+latent_dim: ${model.z_dim}
+
+encoder:
+  _target_: models.modules.mlp_ae.Encoder
+
+  encoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${datamodule.dataset.x_dim}
+      out_features: ${model.autoencoder.latent_dim}
+    
+decoder:
+  _target_: models.modules.mlp_ae.Decoder
+
+  decoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: ${datamodule.dataset.x_dim}

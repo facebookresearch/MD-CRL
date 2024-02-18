@@ -1,0 +1,52 @@
+_target_: datamodule.xz_datamodule.XZDataModule
+  
+dataset_name: xz
+datamodule_name: ${datamodule.dataset_name}
+
+
+data_dir: ${run_path}
+
+seed: ${seed}
+
+# Concerning the data_loaders
+batch_size: 1024
+num_workers: 6
+shuffle: False
+drop_last: False
+
+dataset_parameters:
+  train:
+    dataset:
+      data_dir: ${datamodule.data_dir}
+      split: "train"
+      seed: ${datamodule.seed}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      data_dir: ${datamodule.data_dir}
+      split: "valid"
+      seed: ${datamodule.seed}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      data_dir: ${datamodule.data_dir}
+      split: "test"
+      seed: ${datamodule.seed}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}

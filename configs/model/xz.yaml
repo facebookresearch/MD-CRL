@@ -1,0 +1,22 @@
+_target_: models.xz_pl.XZPl
+
+defaults:
+  - scheduler_config: reduce_on_plateau # options: null, reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - additional_logger: null # reconstruction_logger
+
+
+zhat_dim: 128
+zhat_dim_inv: 102
+z_dim: 4
+z_dim_inv: 2
+
+hidden_size: 500
+n_layers: 3
+negative_slope: 0.2
+activation:
+  _target_: torch.nn.LeakyReLU
+  negative_slope: ${model.negative_slope}
+  
+
+logging_name: "xz_${model.zhat_dim}_${model.zhat_dim_inv}_${model.hidden_size}_${model.n_layers}"

@@ -1,0 +1,141 @@
+_target_: models.modules.mlp_ae.FCAE
+
+activation: torch.nn.LeakyReLU # torch.nn.ReLU, torch.nn.LeakyLeakyReLU, torch.nn.Sigmoid, torch.nn.Tanh
+latent_dim: ${model.z_dim}
+
+encoder_fc:
+  _target_: models.modules.mlp_ae.Encoder
+
+  encoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${datamodule.dataset.x_dim}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU1:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU2:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear5:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${model.autoencoder.latent_dim}
+      bias: False
+    # LeakyReLU2:
+    #   _target_: torch.nn.LeakyReLU
+
+    
+decoder_fc:
+  _target_: models.modules.mlp_ae.Decoder
+
+  decoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU1:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU2:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear3:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${datamodule.dataset.x_dim}
+      bias: False
+
+
+# encoder_fc:
+#   _target_: models.modules.mlp_ae.Encoder
+
+#   encoder_layers:
+#     Linear1:
+#       _target_: torch.nn.Linear
+#       in_features: ${datamodule.dataset.x_dim}
+#       out_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU1:
+#       _target_: ${model.autoencoder.activation}
+#     Linear2:
+#       _target_: torch.nn.Linear
+#       in_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       out_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU2:
+#       _target_: ${model.autoencoder.activation}
+#     Linear3:
+#       _target_: torch.nn.Linear
+#       in_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       out_features: ${datamodule.dataset.x_dim}
+#       bias: False
+#     LeakyReLU3:
+#       _target_: ${model.autoencoder.activation}
+#     Linear4:
+#       _target_: torch.nn.Linear
+#       in_features: ${datamodule.dataset.x_dim}
+#       out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU4:
+#       _target_: ${model.autoencoder.activation}
+#     Linear5:
+#       _target_: torch.nn.Linear
+#       in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+#       out_features: ${model.autoencoder.latent_dim}
+#       bias: False
+#     # LeakyReLU2:
+#     #   _target_: torch.nn.LeakyReLU
+
+    
+# decoder_fc:
+#   _target_: models.modules.mlp_ae.Decoder
+
+#   decoder_layers:
+#     Linear1:
+#       _target_: torch.nn.Linear
+#       in_features: ${model.autoencoder.latent_dim}
+#       out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU1:
+#       _target_: ${model.autoencoder.activation}
+#     Linear2:
+#       _target_: torch.nn.Linear
+#       in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+#       out_features: ${datamodule.dataset.x_dim}
+#       bias: False
+#     LeakyReLU2:
+#       _target_: ${model.autoencoder.activation}
+#     Linear3:
+#       _target_: torch.nn.Linear
+#       in_features: ${datamodule.dataset.x_dim}
+#       out_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU3:
+#       _target_: ${model.autoencoder.activation}
+#     Linear4:
+#       _target_: torch.nn.Linear
+#       in_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       out_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       bias: False
+#     LeakyReLU4:
+#       _target_: ${model.autoencoder.activation}
+#     Linear5:
+#       _target_: torch.nn.Linear
+#       in_features: ${mult_int:${datamodule.dataset.x_dim},2}
+#       out_features: ${datamodule.dataset.x_dim}
+#       bias: False
+#     # LeakyReLU2:
+#     #   _target_: torch.nn.LeakyReLU

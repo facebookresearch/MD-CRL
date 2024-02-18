@@ -1,0 +1,233 @@
+_target_: models.modules.cnn_ae.CNNAE
+
+latent_dim: ${model.z_dim}
+width: 64
+height: 64
+num_channels: 3
+upsampling_interpolation: nearest # options: nearest, bilinear, bicubic, trilinear
+
+encoder_cnn:
+  _target_: models.modules.cnn_ae.Encoder
+  latent_dim: ${model.autoencoder.latent_dim}
+  width: ${model.autoencoder.width}
+  height: ${model.autoencoder.height}
+
+  encoder_layers:
+    Conv1:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.num_channels}
+      out_channels: 16
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # 3x64x64 --> out_channelsx32x32
+    BN1:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.encoder_cnn.encoder_layers.Conv1.out_channels}
+    LeakyReLU1:
+      _target_: torch.nn.LeakyReLU
+    Conv2:
+      _target_: torch.nn.Conv2d
+      in_channels: 16
+      out_channels: 32
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # in_channelsx32x32 --> out_channelsx16x16
+    BN2:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.encoder_cnn.encoder_layers.Conv2.out_channels}
+    LeakyReLU2:
+      _target_: torch.nn.LeakyReLU
+    Conv3:
+      _target_: torch.nn.Conv2d
+      in_channels: 32
+      out_channels: 64
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # in_channelsx16x16 --> out_channelsx8x8
+    BN3:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.encoder_cnn.encoder_layers.Conv3.out_channels}
+    LeakyReLU3:
+      _target_: torch.nn.LeakyReLU
+    Conv4:
+      _target_: torch.nn.Conv2d
+      in_channels: 64
+      out_channels: 128
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # in_channelsx8x8 --> out_channelsx4x4
+    BN4:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.encoder_cnn.encoder_layers.Conv4.out_channels}
+    LeakyReLU4:
+      _target_: torch.nn.LeakyReLU
+    Conv5:
+      _target_: torch.nn.Conv2d
+      in_channels: 128
+      out_channels: 128
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # in_channelsx4x4 --> out_channelsx2x2
+    BN5:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.encoder_cnn.encoder_layers.Conv5.out_channels}
+    LeakyReLU5:
+      _target_: torch.nn.LeakyReLU
+    Conv6:
+      _target_: torch.nn.Conv2d
+      in_channels: 128
+      out_channels: ${model.autoencoder.latent_dim}
+      kernel_size: 4
+      stride: 2
+      padding: 1
+      # in_channelsx2x2 --> latent_dimx1x1
+    # LeakyReLU6:
+    #   _target_: torch.nn.LeakyReLU
+
+      
+decoder_cnn:
+  _target_: models.modules.cnn_ae.Decoder
+  latent_dim: ${model.autoencoder.latent_dim}
+  width: ${model.autoencoder.width}
+  height: ${model.autoencoder.height}
+  num_channels: ${model.autoencoder.num_channels}
+
+  decoder_layers:
+    Upsample1:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx1x1 --> in_channelsx2x2
+
+    Conv1:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.latent_dim}
+      out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv5.out_channels}
+      kernel_size: 2
+      stride: 2
+      padding: 1
+      # in_channelsx2x2 --> out_channelsx2x2
+
+    BN1:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Conv1.out_channels}
+
+    LeakyReLU1:
+      _target_: torch.nn.LeakyReLU
+
+    Upsample2:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx2x2 --> in_channelsx4x4
+
+    Conv2:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Conv1.out_channels}
+      out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv4.out_channels}
+      kernel_size: 3  # Adjust the kernel size as needed
+      stride: 1
+      padding: 1
+      # in_channelsx4x4 --> out_channelsx4x4
+
+    BN2:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Conv2.out_channels}
+
+    LeakyReLU2:
+      _target_: torch.nn.LeakyReLU
+
+    Upsample3:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx4x4 --> in_channelsx8x8
+
+    Conv3:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Conv2.out_channels}
+      out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv3.out_channels}
+      kernel_size: 3
+      stride: 1
+      padding: 1
+      # in_channelsx8x8 --> out_channelsx8x8
+
+    BN3:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Conv3.out_channels}
+
+    LeakyReLU3:
+      _target_: torch.nn.LeakyReLU
+
+    Upsample4:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx8x8 --> in_channelsx16x16
+
+    Conv4:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Conv3.out_channels}
+      out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv2.out_channels}
+      kernel_size: 3
+      stride: 1
+      padding: 1
+      # in_channelsx16x16 --> out_channelsx16x16
+
+    BN4:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Conv4.out_channels}
+
+    ReLU4:
+      _target_: torch.nn.ReLU
+
+    Upsample5:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx16x16 --> in_channelsx32x32
+
+    Conv5:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Conv4.out_channels}
+      out_channels: ${model.autoencoder.encoder_cnn.encoder_layers.Conv1.out_channels}
+      kernel_size: 3
+      stride: 1
+      padding: 1
+      # in_channelsx32x32 --> out_channelsx32x32
+    
+    BN5:
+      _target_: torch.nn.BatchNorm2d
+      num_features: ${model.autoencoder.decoder_cnn.decoder_layers.Conv5.out_channels}
+
+    LeakyReLU5:
+      _target_: torch.nn.LeakyReLU
+
+    Upsample6:
+      _target_: torch.nn.Upsample
+      scale_factor: 2  # Upsample factor, adjust as needed
+      mode: ${model.autoencoder.upsampling_interpolation}  # Use nearest/bilinear/etc. interpolation for upsampling
+      # align_corners: false  # Set to false to match behavior of most frameworks
+      # in_channelsx32x32 --> in_channelsx64x64
+
+    Conv6:
+      _target_: torch.nn.Conv2d
+      in_channels: ${model.autoencoder.decoder_cnn.decoder_layers.Conv5.out_channels}
+      out_channels: ${model.autoencoder.num_channels}
+      kernel_size: 3
+      stride: 1
+      padding: 1
+      # in_channelsx64x64 --> num_channelsx64x64
+
+    # LeakyReLU6:
+    #   _target_: torch.nn.LeakyReLU

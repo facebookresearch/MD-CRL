@@ -1,0 +1,35 @@
+_target_: datamodule.base_datamodule.BaseDataModule
+
+defaults:
+  - dataset: synthetic_mixing
+  
+dataset_name: synthetic_mixing
+datamodule_name: ${datamodule.dataset.dataset_name}
+
+save_dataset: True
+load_dataset: False
+# save_dataset: True
+# load_dataset: False
+data_dir: ${work_dir} # "/home/mila/s/sayed.mansouri-tehrani/scratch/poly_mixing/"
+data_dir_narval: ${work_dir} # "/home/aminm/scratch/poly_mixing/"
+# data_dir_narval: "/home/aminm/scratch/md_balls/${datamodule.dataset.n_balls}/"
+
+seed: ${seed}
+
+transform:
+    augs: [] # choices=["shift", "hflip", "vflip", "scale", "rotate"]
+
+# Concerning the data_loaders
+batch_size: 512
+num_workers: 6
+shuffle: False
+drop_last: False
+
+# Samples
+num_samples:
+    train: 12000 # 30000
+    valid: 2000 # 4000
+    test: 2000
+
+   
+transforms:

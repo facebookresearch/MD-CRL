@@ -1,0 +1,43 @@
+dataset_target: datamodule.mnist_dataset.MNISTRegularDataset
+
+dataset_name: mnist
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.train}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "valid"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.valid}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.test}
+      
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}

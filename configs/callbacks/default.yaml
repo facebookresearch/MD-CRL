@@ -1,0 +1,32 @@
+# specify here default for callbacks
+defaults:
+  - visualization_callback: default.yaml
+  - _self_
+
+
+model_checkpoint:
+  _target_: pytorch_lightning.callbacks.ModelCheckpoint
+  monitor: "val_loss" # name of the logged metric which determines when model is improving
+  mode: "min" # can be "max" or "min"
+  save_top_k: 10 # save k best models (determined by above metric)
+  save_last: True # additionally always save model from last epoch
+  verbose: True
+  dirpath: "checkpoints/"
+  #filename: "epoch_{epoch:03d}" # TODO: possibly change
+  filename: "${model.logging_name}-{epoch:02d}-{${callbacks.model_checkpoint.monitor}:.2f}" 
+  save_on_train_epoch_end: False
+  auto_insert_metric_name: True
+#   every_n_epochs: 1
+  every_n_train_steps: 20
+
+learning_rate_monitor:
+  _target_: pytorch_lightning.callbacks.LearningRateMonitor
+  logging_interval: "step"
+
+early_stopping:
+ _target_: pytorch_lightning.callbacks.EarlyStopping
+ monitor: "val_loss" # name of the logged metric which determines when model is improving
+ mode: "min" # can be "max" or "min"
+ patience: 20 # how many validation epochs of not improving until training stops
+ min_delta: 0.0001 # minimum change in the monitored metric needed to qualify as an improvement
+

@@ -1,0 +1,87 @@
+_target_: models.modules.beta_vae.BetaVAE
+
+activation: torch.nn.LeakyReLU # torch.nn.ReLU, torch.nn.LeakyLeakyReLU, torch.nn.Sigmoid, torch.nn.Tanh
+latent_dim: ${model.z_dim}
+beta: ${model.beta}
+width: 200
+negative_slope: 0.2
+
+encoder_layers:
+  Linear1:
+    _target_: torch.nn.Linear
+    in_features: ${datamodule.dataset.x_dim}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN1:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU1:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear2:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN2:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU3:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear4:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN4:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU4:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear5:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${mult_int:${model.autoencoder.latent_dim},2}
+    bias: True
+
+decoder_layers:
+  Linear1:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.latent_dim}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN1:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU1:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear2:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN2:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU3:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear4:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${model.autoencoder.width}
+    bias: True
+  BN4:
+    _target_: torch.nn.BatchNorm1d
+    num_features: ${model.autoencoder.width}
+  ReLU4:
+    _target_: ${model.autoencoder.activation}
+    negative_slope: ${model.autoencoder.negative_slope}
+  Linear5:
+    _target_: torch.nn.Linear
+    in_features: ${model.autoencoder.width}
+    out_features: ${datamodule.dataset.x_dim}
+    bias: True

@@ -1,0 +1,17 @@
+_target_: models.autoencoder_pl.AutoencoderPL.load_from_checkpoint
+
+defaults:
+  - scheduler_config: null # options: reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - autoencoder: cnn_ae  # options: fc_ae_image, cnn_ae
+  - additional_logger: null # reconstruction_logger
+
+
+# important note: if you pass a full PL checkpoint it will have all the modules like callbacks, hyperparameters, optimizers, etc., i.e., the state of training.
+# hence you should be careful that the model loading the ckpt is consistent with what is being passed. on the other hand you can just save the state dict
+# and pass that as the ckpt and override the parameters of the model you're loading the ckpt for as you want.
+
+
+# hparams_file: ${work_dir}/configs/model/overrides.yaml
+num_channels: ${model.autoencoder.num_channels}
+logging_name: eval_from_ckpt_${run_name_ckpt:${model.checkpoint_path}}

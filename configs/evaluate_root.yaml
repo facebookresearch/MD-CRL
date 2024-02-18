@@ -1,0 +1,50 @@
+# @package _global_
+
+# specify here default evaluation configuration
+defaults:
+  - _self_
+  - trainer: default.yaml
+  - model: default_ckpt.yaml
+  - datamodule: mnist.yaml
+  - callbacks: default.yaml # set this to null if you don't want to use callbacks
+  - logger: wandb # set to null if you don't want to use any loggers
+  - hydra: evaluation
+
+
+  # debugging config (enable through command line, e.g. `python train.py debug=fast)
+  - debug: null
+
+  # enable color logging
+  # - override hydra/hydra_logging: colorlog
+  # - override hydra/job_logging: colorlog
+  # enable job submission through slurm
+  # options: submitit_slurm_mila, submitit_slurm_mila_v100_multicore
+  # , submitit_slurm_mila_a100, submitit_slurm_narval, submitit_slurm_narval_multicore
+  # , submitit_local_
+  # - override hydra/launcher: submitit_slurm_narval # options: submitit_slurm_mila, submitit_slurm_mila_v100_multicore, submitit_slurm_narval, submitit_slurm_narval_multicore, submitit_local_
+
+model:
+  checkpoint_path: ${ckpt_path}
+  write_testing_output: True
+
+# verbose explanation: Hydra hijacks the working directory by changing it to the current log directory,
+# so it's useful to have this path as a special variable
+# learn more here: https://hydra.cc/docs/next/tutorials/basic/running_your_app/working_directory
+work_dir: ${hydra:runtime.cwd} # /home/aminm/mechanism-based-disentanglement/disentanglement_by_mechanisms # ${hydra:runtime.cwd}
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 1234
+
+# the experiment name – determines the logging folder's path
+run_name: ${model.logging_name} # Will be used for logging
+
+# TODO: Is this necessary? Since _self_ is at the top of the DefaultList, model.checkpoint_path will 
+# be overriden by the contents of seq2seq_ckpt.yaml
+# passing checkpoint path is necessary
+# ckpt_path: ???

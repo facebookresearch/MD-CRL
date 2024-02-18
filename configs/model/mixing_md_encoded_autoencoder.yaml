@@ -1,0 +1,87 @@
+_target_: models.mixing_md_encoded_autoencoder_pl.MixingMDEncodedAutoencoderPL
+
+defaults:
+  - scheduler_config: null # options: reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - additional_logger: null # reconstruction_logger
+
+
+top_k: 5
+num_domains: ${datamodule.num_domains}
+z_dim: ${datamodule.x_dim}
+z_dim_invariant_fraction: 0.5
+z_dim_invariant: ${mult_int:${model.z_dim},${model.z_dim_invariant_fraction}}
+# z_dim_invariant: ${floor_div:${model.z_dim},2}
+# penalty_criterion: "minmax" # options: minmax, stddev, "domain_classification"
+penalty_criterion:
+  minmax: 0.
+  stddev: 0.
+  mmd: 1.0
+  domain_classification: 0.
+
+loss_transform: "mse"
+penalty_weight: 1.0
+stddev_threshold: 1.0
+stddev_eps: 0.0001
+hinge_loss_weight: 0.0
+wait_steps: 0 # 500 # 2000
+linear_steps: 1 # 2000 # 3000
+
+mmd_loss:
+  _target_: models.utils.MMD_loss
+  kernel_multiplier: 1.0
+  kernel_number: 1
+  fix_sigma: 1.0
+
+# full ckpt containing state_dict, callbacks, optimizer, hyperparameters, etc.
+pl_model_ckpt_path: null
+# set this to null to train from scratch.  NOTE: This path (.pt) only contains the 
+# state_dict (to be flexible), if the full ckpt is required (not flexible w/ 
+# different # of slots, then load .ckpt file)
+autoencoder_ckpt_path: null
+autoencoder_freeze: False
+
+autoencoder:
+  _target_: models.modules.mlp_ae.FCAE
+
+  latent_dim: ${model.z_dim}
+
+  encoder:
+    _target_: models.modules.mlp_ae.Encoder
+
+    encoder_layers:
+      Linear1:
+        _target_: torch.nn.Linear
+        in_features: ${model.autoencoder.latent_dim}
+        out_features: ${model.autoencoder.latent_dim}
+      # LeakyReLU1:
+      #   _target_: torch.nn.LeakyReLU
+      #   negative_slope: 0.5
+      # Linear2:
+      #   _target_: torch.nn.Linear
+      #   in_features: ${model.autoencoder.latent_dim}
+      #   out_features: ${model.autoencoder.latent_dim}
+      # LeakyReLU2:
+      #   _target_: torch.nn.LeakyReLU
+      #   negative_slope: 0.5
+      
+  decoder:
+    _target_: models.modules.mlp_ae.Decoder
+
+    decoder_layers:
+      Linear1:
+        _target_: torch.nn.Linear
+        in_features: ${model.autoencoder.latent_dim}
+        out_features: ${model.autoencoder.latent_dim}
+      # LeakyReLU1:
+      #   _target_: torch.nn.LeakyReLU
+      #   negative_slope: 0.5
+      # Linear2:
+      #   _target_: torch.nn.Linear
+      #   in_features: ${model.autoencoder.latent_dim}
+      #   out_features: ${model.autoencoder.latent_dim}
+      # LeakyReLU2:
+      #   _target_: torch.nn.LeakyReLU
+      #   negative_slope: 0.5
+
+logging_name: "autoencoder_${datamodule.datamodule_name}_${model.autoencoder.latent_dim}_domains_${datamodule.dataset.num_domains}"

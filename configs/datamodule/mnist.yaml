@@ -1,0 +1,45 @@
+_target_: datamodule.base_datamodule.BaseDataModule
+
+defaults:
+  - dataset: mnist # mnist, multi_domain_mnist
+  
+dataset_name: mnist
+datamodule_name: ${datamodule.dataset.dataset_name}
+
+save_dataset: True
+load_dataset: False
+data_dir: ${work_dir} # "/home/mila/s/sayed.mansouri-tehrani/scratch/coloured_mnist/"
+data_dir_narval: ${work_dir} # "~/scratch/coloured_mnist/"
+path: "/network/datasets/torchvision"
+path_narval: "/home/aminm/scratch/"
+
+seed: ${seed}
+
+transform:
+    augs: [] # choices=["shift", "hflip", "vflip", "scale", "rotate"]
+
+# Concerning the data_loaders
+batch_size: 256
+num_workers: 6
+shuffle: False
+drop_last: False
+
+# Samples
+num_samples:
+    train: 0.8
+    valid: 0.2
+    test: 1
+
+      
+transforms:
+    t1:
+      _target_: torchvision.transforms.ToTensor
+    # t2:
+    #   _target_: torchvision.transforms.Normalize
+    #   mean: 0.1307
+    #   std: 0.3081
+    # t2:
+    #   _target_: datamodule.transformations.Standardize
+    t3:
+      _target_: datamodule.transformations.TensorClip
+

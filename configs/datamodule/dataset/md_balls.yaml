@@ -1,0 +1,99 @@
+dataset_target: datamodule.md_balls_dataset.MDBalls
+properties_list: ["x","y"] # can be any subset of ["x","y","c","s","l","p"]
+same_color: False # note that if "c"  is not in the list of properties, this field overrides the colours
+human_mode: False
+
+n_balls_invariant: 1
+z_dim: ${mult_int:${datamodule.dataset.n_balls_invariant},2}
+n_balls_spurious: 1
+n_balls: ${add_int:${datamodule.dataset.n_balls_invariant},${datamodule.dataset.n_balls_spurious}}
+num_domains: 16
+ball_size: 0.08
+invariant_low: [0.1,0.1]
+invariant_high: [0.9,0.9]
+
+correlated_z: False
+corr_prob: 0.5
+
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      human_mode: ${datamodule.dataset.human_mode}
+      n_balls_invariant: ${datamodule.dataset.n_balls_invariant}
+      n_balls_spurious: ${datamodule.dataset.n_balls_spurious}
+      num_domains: ${datamodule.dataset.num_domains}
+      ball_size: ${datamodule.dataset.ball_size}
+      invariant_low: ${datamodule.dataset.invariant_low}
+      invariant_high: ${datamodule.dataset.invariant_high}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.train}
+      color_selection: ${datamodule.color_selection}
+      same_color: ${datamodule.dataset.same_color}
+      z_dim: ${datamodule.dataset.z_dim}
+      properties_list: ${datamodule.dataset.properties_list}
+      ball_radius: ${datamodule.dataset.ball_size}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      human_mode: ${datamodule.dataset.human_mode}
+      n_balls_invariant: ${datamodule.dataset.n_balls_invariant}
+      n_balls_spurious: ${datamodule.dataset.n_balls_spurious}
+      num_domains: ${datamodule.dataset.num_domains}
+      ball_size: ${datamodule.dataset.ball_size}
+      invariant_low: ${datamodule.dataset.invariant_low}
+      invariant_high: ${datamodule.dataset.invariant_high}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      split: "valid"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.valid}
+      color_selection: ${datamodule.color_selection}
+      same_color: ${datamodule.dataset.same_color}
+      z_dim: ${datamodule.dataset.z_dim}
+      properties_list: ${datamodule.dataset.properties_list}
+      ball_radius: ${datamodule.dataset.dataset_parameters.train.dataset.ball_radius}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      human_mode: ${datamodule.dataset.human_mode}
+      n_balls_invariant: ${datamodule.dataset.n_balls_invariant}
+      n_balls_spurious: ${datamodule.dataset.n_balls_spurious}
+      num_domains: ${datamodule.dataset.num_domains}
+      ball_size: ${datamodule.dataset.ball_size}
+      invariant_low: ${datamodule.dataset.invariant_low}
+      invariant_high: ${datamodule.dataset.invariant_high}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.test}
+      color_selection: ${datamodule.color_selection}
+      same_color: ${datamodule.dataset.same_color}
+      z_dim: ${datamodule.dataset.z_dim}
+      properties_list: ${datamodule.dataset.properties_list}
+      ball_radius: ${datamodule.dataset.dataset_parameters.train.dataset.ball_radius}
+      
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}

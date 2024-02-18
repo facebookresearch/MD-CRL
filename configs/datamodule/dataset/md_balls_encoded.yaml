@@ -1,0 +1,52 @@
+dataset_target: datamodule.md_balls_encoded_dataset.BallsMultiDomainEncodedDataset
+
+dataset_name: multi_domain_balls_encoded_${datamodule.dataset.num_domains}
+num_domains: ${retrieve_num_domain:${run_path}}
+x_dim: ${datamodule.x_dim}
+normalize: True
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "valid"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}

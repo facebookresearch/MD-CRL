@@ -1,0 +1,22 @@
+_target_: models.balls_autoencoder_pl.BallsAutoencoderPL
+
+defaults:
+  - scheduler_config: reduce_on_plateau # options: reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - autoencoder: cnn_ae_balls # options: fc_ae_image, cnn_ae
+  - additional_logger: null # reconstruction_logger
+
+save_encoded_data: True
+
+z_dim: 64
+
+# full ckpt containing state_dict, callbacks, optimizer, hyperparameters, etc.
+pl_model_ckpt_path: null
+# set this to null to train from scratch.  NOTE: This path (.pt) only contains the 
+# state_dict (to be flexible), if the full ckpt is required (not flexible w/ 
+# different # of slots, then load .ckpt file)
+autoencoder_ckpt_path: ${retrieve_encoder_state_dict:${model.pl_model_ckpt_path}}
+autoencoder_freeze: False
+
+
+logging_name: "autoencoder_${datamodule.datamodule_name}_${model.autoencoder.latent_dim}_iv_${datamodule.dataset.n_balls_invariant}_sp_${datamodule.dataset.n_balls_spurious}"

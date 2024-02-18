@@ -1,0 +1,10 @@
+# @package hydra.launcher
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.LocalLauncher
+submitit_folder: ${hydra.sweep.dir}/.submitit/%j
+timeout_min: 1440 # 24 hrs
+cpus_per_task: 4
+gpus_per_node: 0
+tasks_per_node: 1
+mem_gb: 12
+nodes: 1
+name: ${hydra.job.name}

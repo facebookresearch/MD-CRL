@@ -1,0 +1,19 @@
+_target_: datamodule.encoded_datamodule.EncodedDataModule
+
+defaults:
+  - dataset: md_mixing_encoded # mnist, multi_domain_mnist
+
+dataset_name: mixing_encoded
+datamodule_name: ${datamodule.dataset_name}
+
+data_dir: ${run_path}
+
+seed: ${seed}
+num_domains: ${retrieve_num_domain:${run_path}}
+x_dim: ${retrieve_x_dimension:${run_path}}
+
+# Concerning the data_loaders
+batch_size: 256
+num_workers: 6
+shuffle: False
+drop_last: False

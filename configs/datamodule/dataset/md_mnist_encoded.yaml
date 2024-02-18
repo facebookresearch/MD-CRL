@@ -1,0 +1,55 @@
+dataset_target: datamodule.md_mnist_encoded_dataset.MNISTMultiDomainEncodedDataset
+
+dataset_name: multi_domain_mnist_encoded_${datamodule.dataset.num_domains}
+num_domains: ${retrieve_num_domain:${run_path}}
+generation_strategy: "auto" # options: auto, manual
+normalize: True
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "valid"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      data_dir: ${datamodule.data_dir}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_domains: ${datamodule.dataset.num_domains}
+      normalize: ${datamodule.dataset.normalize}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
