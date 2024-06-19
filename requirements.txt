@@ -38,6 +38,6 @@ submitit==1.4.6
 torch==2.0.1
 torchmetrics==1.1.2
 torchvision==0.15.2
-tqdm==4.66.1
+tqdm==4.66.3
 wandb==0.15.10
 yarl==1.9.2
