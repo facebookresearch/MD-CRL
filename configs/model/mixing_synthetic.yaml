@@ -1,0 +1,48 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: models.mixing_autoencoder_pl.MixingAutoencoderPL
+
+defaults:
+  - scheduler_config: reduce_on_plateau # options: null, reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - autoencoder: linear_ae_synthetic # options:
+  - additional_logger: null # reconstruction_logger
+
+save_encoded_data: False
+
+top_k: 5
+num_domains: ${datamodule.dataset.num_domains}
+mismatch_dims: 0
+z_dim: ${add_int:${datamodule.dataset.z_dim},${mult_int:${model.mismatch_dims},2}}
+z_dim_invariant: ${add_int:${datamodule.dataset.z_dim_invariant},${model.mismatch_dims}} # make sure it is smaller than encoder's latent_dim
+penalty_criterion:
+  minmax: 0.
+  stddev: 0.
+  mmd: 1.0
+  domain_classification: 0.
+
+loss_transform: "mse"
+penalty_weight: 1.0
+stddev_threshold: 1.0
+stddev_eps: 0.0001
+hinge_loss_weight: 0.0
+wait_steps: 0 # 500 # 2000
+linear_steps: 1 # 2000 # 3000
+
+mmd_loss:
+  _target_: models.utils.MMD_loss
+  kernel_multiplier: 1.0
+  kernel_number: 1
+  fix_sigma: 1.0
+
+pl_model_ckpt_path: null
+autoencoder_ckpt_path: ${retrieve_encoder_state_dict:${model.pl_model_ckpt_path}}
+autoencoder_freeze: False
+
+
+logging_name: "autoencoder_${datamodule.datamodule_name}_linear_${datamodule.dataset.linear}_${datamodule.dataset.num_domains}_${datamodule.dataset.z_dim}_p${datamodule.dataset.polynomial_degree}"

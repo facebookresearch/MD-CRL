@@ -1,0 +1,24 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    mode: 'min'
+    factor: 0.5
+    patience: 10
+    threshold: 0.001
+    threshold_mode: 'abs'
+    cooldown: 10
+    min_lr: 1e-4
+    eps: 1e-8
+    verbose: True
+    
+scheduler_dict:
+    interval: "epoch"  # The unit of the scheduler's step size. 'step' or 'epoch
+    frequency: 1  # corresponds to updating the learning rate after every `frequency` epoch/step
+    monitor: train_loss # train_loss # Used by a LearningRateMonitor callback when ReduceLROnPlateau is used
+    name: "ReduceLROnPlateau"

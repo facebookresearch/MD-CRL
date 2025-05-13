@@ -1,0 +1,17 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+scheduler:
+    _target_: transformers.get_linear_schedule_with_warmup
+    num_warmup_steps: 1500
+    num_training_steps: 3000
+
+
+scheduler_dict:
+    interval: "step"  # The unit of the scheduler's step size. 'step' or 'epoch
+    frequency: 1  # corresponds to updating the learning rate after every `frequency` epoch/step
+    name: "linear_schedule_with_warmup"

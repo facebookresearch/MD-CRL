@@ -1,0 +1,49 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: datamodule.base_datamodule.BaseDataModule
+
+defaults:
+  - dataset: md_balls # position_offset_only # options: colour_offset_only, position_offset_only
+  
+dataset_name: md_balls_${datamodule.dataset.n_balls}
+datamodule_name: md_balls
+
+save_dataset: False
+load_dataset: True
+data_dir: ${work_dir}
+
+
+
+seed: ${seed}
+
+transform:
+    augs: [] # choices=["shift", "hflip", "vflip", "scale", "rotate"]
+
+
+batch_size: 256
+num_workers: 6
+shuffle: False
+drop_last: False
+
+num_samples:
+    train: 60000
+    valid: 10000
+    test: 1000
+
+
+color_selection: cyclic_fixed # options: cyclic_fixed, same, random
+
+      
+transforms:
+    t1:
+      _target_: torchvision.transforms.ToTensor
+    t2:
+      _target_: datamodule.transformations.Standardize
+    t3:
+      _target_: datamodule.transformations.TensorClip
+

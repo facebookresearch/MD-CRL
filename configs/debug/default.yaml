@@ -1,0 +1,29 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+defaults:
+  - override /hydra: debug
+
+num_steps: 100
+num_validation_runs: 1
+
+trainer:
+  max_steps: ${num_steps}
+  gpus: 0 # debuggers don't like gpus
+  track_grad_norm: 2 # track gradient norm with loggers
+  val_check_interval: ${floor_div:${num_steps}, ${num_validation_runs}}
+  #  Available in newer version of PL
+  #  detect_anomaly: true # raise exception if NaN or +/-inf is detected in any tensor
+
+datamodule:
+  num_workers: 0 # debuggers don't like multiprocessing
+  pin_memory: False # disable gpu memory pin
+
+hydra:
+  verbose: True
+
+print_config: False

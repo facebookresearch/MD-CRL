@@ -1,0 +1,11 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: callbacks.visualization_logger.VisualizationLoggerCallback
+
+visualize_every: 100 # Invoke visualization utilities every m training batches.
+n_samples: 7

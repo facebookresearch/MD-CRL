@@ -1,0 +1,51 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: models.modules.mlp_poly_ae.FCAEPoly
+
+activation: torch.nn.LeakyReLU # torch.nn.ReLU, torch.nn.LeakyLeakyReLU, torch.nn.Sigmoid, torch.nn.Tanh
+latent_dim: ${model.z_dim}
+
+encoder:
+  _target_: models.modules.mlp_poly_ae.Encoder
+
+  encoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${datamodule.dataset.x_dim}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU1:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      bias: False
+    LeakyReLU2:
+      _target_: ${model.autoencoder.activation}
+      negative_slope: 0.5
+    Linear5:
+      _target_: torch.nn.Linear
+      in_features: ${floor_div:${datamodule.dataset.x_dim},2}
+      out_features: ${model.autoencoder.latent_dim}
+      bias: False
+    # LeakyReLU2:
+    #   _target_: torch.nn.LeakyReLU
+
+    
+decoder:
+  _target_: models.modules.mlp_poly_ae.Decoder
+
+  decoder_layers:
+
+    PolyDecoder:
+      _target_: models.modules.poly_decoder.PolyDecoder
+      data_dim: ${datamodule.dataset.x_dim}
+      latent_dim: ${datamodule.dataset.z_dim}
+      poly_degree: ${datamodule.dataset.polynomial_degree}

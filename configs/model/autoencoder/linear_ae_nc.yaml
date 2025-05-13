@@ -1,0 +1,28 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: models.modules.mlp_ae.FCAE
+
+latent_dim: ${model.z_dim}
+
+encoder:
+  _target_: models.modules.mlp_ae.Encoder
+
+  encoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: ${model.autoencoder.latent_dim}
+    
+decoder:
+  _target_: models.modules.mlp_ae.Decoder
+
+  decoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: ${model.autoencoder.latent_dim}

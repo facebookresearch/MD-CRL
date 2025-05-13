@@ -1,0 +1,42 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: models.mnist_md_autoencoder_pl.MNISTMDAutoencoderPL
+
+defaults:
+  - scheduler_config: null # options: reduce_on_plateau, linear, polynomial
+  - optimizer: adam # options: adamw, adam
+  - autoencoder: cnn_ae # options:
+  - additional_logger: null # reconstruction_logger
+
+save_encoded_data: False
+
+top_k: 5
+num_domains: ${datamodule.dataset.num_domains}
+z_dim: 32
+z_dim_invariant_fraction: 0.5
+z_dim_invariant: ${mult_int:${model.z_dim},${model.z_dim_invariant_fraction}}
+penalty_criterion:
+  minmax: 0.
+  stddev: 0.
+  mmd: 0.0
+  domain_classification: 0.
+penalty_weight: 0.1
+stddev_threshold: 1.0
+stddev_eps: 0.0001
+hinge_loss_weight: 10.0
+wait_steps: 0 # 500 # 2000
+linear_steps: 1 # 2000 # 3000
+
+
+
+pl_model_ckpt_path: null
+autoencoder_ckpt_path: ${retrieve_encoder_state_dict:${model.pl_model_ckpt_path}}
+autoencoder_freeze: False
+
+
+logging_name: "autoencoder_${datamodule.datamodule_name}_${model.autoencoder.latent_dim}"

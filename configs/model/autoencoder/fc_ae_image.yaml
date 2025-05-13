@@ -1,0 +1,118 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+_target_: models.modules.fc_ae_image.FCAE
+
+latent_dim: ${model.z_dim}
+width: 28
+height: 28
+num_channels: 1
+
+encoder_fc:
+  _target_: models.modules.fc_ae_image.Encoder
+  latent_dim: ${model.autoencoder.latent_dim}
+  width: ${model.autoencoder.width}
+  height: ${model.autoencoder.height}
+
+  encoder_layers:
+    Flatten: 
+      _target_: torch.nn.Flatten
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${mult_int:${model.autoencoder.width},${model.autoencoder.height},${model.autoencoder.num_channels}}
+      out_features: 512
+    LeakyReLU1:
+      _target_: torch.nn.LeakyReLU
+    Dropout1:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: 512
+      out_features: 256
+    LeakyReLU2:
+      _target_: torch.nn.LeakyReLU
+    Dropout2:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear3:
+      _target_: torch.nn.Linear
+      in_features: 256
+      out_features: 128
+    LeakyReLU3:
+      _target_: torch.nn.LeakyReLU
+    Dropout3:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear4:
+      _target_: torch.nn.Linear
+      in_features: 128
+      out_features: 64
+    LeakyReLU4:
+      _target_: torch.nn.LeakyReLU
+    Dropout4:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear5:
+      _target_: torch.nn.Linear
+      in_features: 64
+      out_features: ${model.autoencoder.latent_dim}
+    LeakyReLU5:
+      _target_: torch.nn.LeakyReLU
+
+decoder_fc:
+  _target_: models.modules.fc_ae_image.Decoder
+  latent_dim: ${model.autoencoder.latent_dim}
+  width: ${model.autoencoder.width}
+  height: ${model.autoencoder.height}
+  num_channels: ${model.autoencoder.num_channels}
+
+  decoder_layers:
+    Linear1:
+      _target_: torch.nn.Linear
+      in_features: ${model.autoencoder.latent_dim}
+      out_features: 64
+    LeakyReLU1:
+      _target_: torch.nn.LeakyReLU
+    Dropout1:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear2:
+      _target_: torch.nn.Linear
+      in_features: 64
+      out_features: 128
+    LeakyReLU2:
+      _target_: torch.nn.LeakyReLU
+    Dropout2:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear3:
+      _target_: torch.nn.Linear
+      in_features: 128
+      out_features: 256
+    LeakyReLU3:
+      _target_: torch.nn.LeakyReLU
+    Dropout3:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear4:
+      _target_: torch.nn.Linear
+      in_features: 256
+      out_features: 512
+    LeakyReLU4:
+      _target_: torch.nn.LeakyReLU
+    Dropout4:
+      _target_: torch.nn.Dropout
+      p: 0.5
+    Linear5:
+      _target_: torch.nn.Linear
+      in_features: 512
+      out_features: ${mult_int:${model.autoencoder.width},${model.autoencoder.height},${model.autoencoder.num_channels}}
+    LeakyReLU5:
+      _target_: torch.nn.LeakyReLU
+      # _target_: torch.nn.Tanh
+      # _target_: torch.nn.Sigmoid

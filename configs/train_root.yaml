@@ -1,0 +1,46 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+defaults:
+  - _self_
+  - trainer: default.yaml
+  - model: default.yaml
+  - datamodule: mnist.yaml
+  - callbacks: default.yaml # set this to null if you don't want to use callbacks
+  - logger: wandb # either set it to null or set logger here or use command line 
+                  # (e.g. `python run.py logger=wandb`)
+  - hydra: training
+
+  # debugging config (enable through command line, e.g. `python train.py debug=default)
+  - debug: null
+
+  # enable color logging
+  # - override hydra/hydra_logging: default # colorlog
+  # - override hydra/job_logging: default # colorlog
+  # enable job submission through slurm
+  # options: submitit_slurm_mila, submitit_slurm_mila_v100_multicore
+  # , submitit_slurm_mila_a100, submitit_slurm_narval, submitit_slurm_narval_multicore
+  # , submitit_local_
+  - override hydra/launcher: submitit_slurm_mila_cpu
+
+
+
+test: False
+
+work_dir: ${hydra:runtime.cwd}
+
+ckpt_path: ???
+
+run_path: null
+
+run_name: ${model.logging_name} # Will be used for logging
+
+print_config: True
+
+ignore_warnings: True
+
+seed: 1234
+

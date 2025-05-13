@@ -1,0 +1,21 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+submitit_folder: ${hydra.sweep.dir}/.submitit/%j
+timeout_min: 120 # 24 hrs
+cpus_per_task: 4
+gpus_per_node: null
+tasks_per_node: 1
+mem_gb: 40
+nodes: 1
+name: ${hydra.job.name}
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+partition: long
+signal_delay_s: 120
+max_num_timeout: 0
+array_parallelism: 256
+  
+setup: # A list of commands to run in sbatch befure running srun

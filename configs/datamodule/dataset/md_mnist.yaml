@@ -1,0 +1,96 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
+dataset_target: datamodule.md_mnist_dataset.MNISTMultiDomainDataset
+
+dataset_name: multi_domain_mnist_${datamodule.dataset.num_domains}
+num_domains: 2
+domain_lengths: [0.5, 0.5]
+generation_strategy: "auto" # options: auto, manual
+spurious_method: "digits" # options: "digits", "background", "fixed_corner", "random_corner"
+normalization: "min_max" # z_score, min_max
+correlated_z: False
+corr_prob: 0.8
+dynamic_corr_prob: 0.9
+
+domain_color_list: [[0,1], [2,3]]
+domain_color_probs: [[0.5, 0.5], [0.5, 0.5]]
+
+
+
+dataset_parameters:
+  train:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "train"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.train}
+      # num_samples: ${datamodule.dataset.num_samples.train}
+      num_domains: ${datamodule.dataset.num_domains}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+      spurious_method: ${datamodule.dataset.spurious_method}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      dynamic_corr_prob: ${datamodule.dataset.dynamic_corr_prob}
+      domain_color_list: ${datamodule.dataset.domain_color_list}
+      domain_color_probs: ${datamodule.dataset.domain_color_probs}
+      normalization: ${datamodule.dataset.normalization}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  valid:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "valid"
+      seed: ${datamodule.seed}
+      # num_samples: ${datamodule.dataset.num_samples.valid}
+      num_samples: ${datamodule.num_samples.valid}
+      num_domains: ${datamodule.dataset.num_domains}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+      spurious_method: ${datamodule.dataset.spurious_method}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      dynamic_corr_prob: ${datamodule.dataset.dynamic_corr_prob}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      domain_color_list: ${datamodule.dataset.domain_color_list}
+      domain_color_probs: ${datamodule.dataset.domain_color_probs}
+      normalization: ${datamodule.dataset.normalization}
+
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
+
+  test:
+    dataset:
+      _target_: ${datamodule.dataset.dataset_target}
+      split: "test"
+      seed: ${datamodule.seed}
+      num_samples: ${datamodule.num_samples.test}
+      # num_samples: ${datamodule.dataset.num_samples.test}
+      num_domains: ${datamodule.dataset.num_domains}
+      generation_strategy: ${datamodule.dataset.generation_strategy}
+      spurious_method: ${datamodule.dataset.spurious_method}
+      correlated_z: ${datamodule.dataset.correlated_z}
+      corr_prob: ${datamodule.dataset.corr_prob}
+      dynamic_corr_prob: ${datamodule.dataset.dynamic_corr_prob}
+      domain_lengths: ${datamodule.dataset.domain_lengths}
+      domain_color_list: ${datamodule.dataset.domain_color_list}
+      domain_color_probs: ${datamodule.dataset.domain_color_probs}
+      normalization: ${datamodule.dataset.normalization}
+      
+    dataloader:
+      batch_size: ${datamodule.batch_size}
+      num_workers: ${datamodule.num_workers}
+      shuffle: ${datamodule.shuffle}
+      drop_last: ${datamodule.drop_last}
