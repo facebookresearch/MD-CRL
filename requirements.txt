@@ -27,7 +27,7 @@ nvidia-nccl-cu11==2.14.3
 nvidia-nvtx-cu11==11.7.91
 omegaconf==2.3.0
 pathtools==0.1.2
-Pillow==10.3.0
+Pillow==12.1.1
 pygame==2.5.1
 pytorch-lightning==2.4.0
 PyYAML==6.0.1
